@@ -1,34 +1,81 @@
 import { Router } from "express";
-import Ad from "../types/ads";
+import AdService from "../services/ad.service";
+import { Ad, PartialAdWithoutId, AdCreate } from "../types/ads";
 
 const router = Router();
 
-const adsList: Ad[] = [
-    {
-        id: "1",
-        title: "Mon super titre 1",
-        description: "Ma super description 1",
-        price: 20.0,
-        picture: "",
-        location: "Paris",
-    },
-    {
-        id: "2",
-        title: "Mon super titre 2",
-        description: "Ma super description 2",
-        price: 30.0,
-        picture: "",
-        location: "Toulouse",
-    },
-  ];
-
-router.get("/ads/list", (req, res) => {
-    res.send(adsList);
+router.get("/list", async (req, res) => {
+    try {
+        const adsList = await new AdService().listAds();
+        res.send(adsList);
+    } catch (err: any) {
+        res.status(500).send({ message: err.message });
+    }
 });
 
-router.get("/ads/find/:id", (req, res) => {
-    // http://localhost:4000/ads/find/123456789 // variable de chemin (path variable)
-    //http://localhost:4000/ads/find?id=123456789 // query variable
+router.get("/find/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const ad = await new AdService().findAdById(id);
+        res.send(ad);
+    } catch (err: any) {
+        res.status(500).send({ message: err.message});
+    }
 });
+
+router.post("/create", async (req, res) => {
+    const {id, title, description, price, picture, location, author, date, categoryId } : AdCreate<Ad> = req.body
+    const ad = {id, title, description, price, picture, location, author, date, categoryId};
+    try {
+        const newAd = await new AdService().createdAd(ad)
+        res.send(newAd);
+    } catch (err: any) {
+        res.status(500).send({ message: err.message});
+    }
+})
+
+router.delete("/delete/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const adDelete = await new AdService().deletedAd(id)
+        res.status(200).send({ message: "Annonce supprimée avec succès", adDelete });
+    } catch (err: any) {
+        res.status(500).send({ message: err.message});
+    }
+})
+
+router.patch("/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const { title, description, picture, location, price, author, date }: PartialAdWithoutId = req.body;
+    const ad = { title, description, picture, location, price, author, date };
+    try {
+        const adUpdate = await new AdService().updatedAd(id, ad);
+        res.send(adUpdate);
+    } catch (err: any) {
+        res.status(500).send({ message: err.message});
+    }
+  });
 
 export default router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
