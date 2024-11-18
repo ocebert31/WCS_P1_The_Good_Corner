@@ -1,6 +1,7 @@
 import { Router } from "express";
 import AdService from "../services/ad.service";
 import { Ad, PartialAdWithoutId, AdCreate } from "../types/ads";
+import AdEntity from "../entities/Ad.entity";
 
 const router = Router();
 
@@ -24,8 +25,8 @@ router.get("/find/:id", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-    const {id, title, description, price, picture, location, author, categoryId } : AdCreate<Ad> = req.body
-    const ad = {id, title, description, price, picture, location, author, categoryId};
+    const {title, description, price, picture, location, author, category } : Omit<AdEntity, "id" | "created_at" | "updated_at"> = req.body
+    const ad = {title, description, price, picture, location, author, category};
     try {
         const newAd = await new AdService().createdAd(ad)
         res.send(newAd);

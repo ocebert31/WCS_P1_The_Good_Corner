@@ -24,7 +24,7 @@ export default class AdEntity {
     @Column()
     author: string;
 
-    @ManyToOne(() => AdEntity, (a) => a.category)
+    @ManyToOne(() => CategoryEntity, (c) => c.ads )
     category: CategoryEntity;
 
     @CreateDateColumn()

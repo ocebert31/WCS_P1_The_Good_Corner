@@ -6,7 +6,4 @@ export default class AdRepository extends Repository<AdEntity> {
     constructor() {
         super(AdEntity, datasource.createEntityManager());
     }
-    // async findAdWithCategory() {
-    //     return await this.findOne({relations: ["category"]});
-    // }
 }
