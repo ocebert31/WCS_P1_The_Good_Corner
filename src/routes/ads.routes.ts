@@ -24,8 +24,8 @@ router.get("/find/:id", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-    const {id, title, description, price, picture, location, author, date, categoryId } : AdCreate<Ad> = req.body
-    const ad = {id, title, description, price, picture, location, author, date, categoryId};
+    const {id, title, description, price, picture, location, author, categoryId } : AdCreate<Ad> = req.body
+    const ad = {id, title, description, price, picture, location, author, categoryId};
     try {
         const newAd = await new AdService().createdAd(ad)
         res.send(newAd);
@@ -46,8 +46,8 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
     const { id } = req.params;
-    const { title, description, picture, location, price, author, date }: PartialAdWithoutId = req.body;
-    const ad = { title, description, picture, location, price, author, date };
+    const { title, description, picture, location, price, author }: PartialAdWithoutId = req.body;
+    const ad = { title, description, picture, location, price, author };
     try {
         const adUpdate = await new AdService().updatedAd(id, ad);
         res.send(adUpdate);

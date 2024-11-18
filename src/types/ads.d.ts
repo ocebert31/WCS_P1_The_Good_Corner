@@ -8,7 +8,6 @@ export type Ad = {
     categoryId: string;
     location: string;
     author: string;
-    date: Date;
 };
 
 export type AdWithoutId<T extends object> = T & {
@@ -19,7 +18,6 @@ export type AdWithoutId<T extends object> = T & {
     location?: string;
     price?: number;
     author?: string;
-    date?: Date;
 };
 
 export type AdCreate<T extends object> = T & {
@@ -30,7 +28,6 @@ export type AdCreate<T extends object> = T & {
     price: number;
     categoryId: string;
     author: string;
-    date: Date;
 };
 
 export type PartialAdWithoutId = AdWithoutId<Partial<Omit<Ad, "id">>>;
