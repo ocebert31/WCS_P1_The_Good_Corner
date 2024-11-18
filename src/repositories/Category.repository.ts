@@ -21,7 +21,6 @@ export default class CategoryRepository extends Repository<CategoryEntity> {
           .orderBy("ad.created_at", "DESC")
           .take(+limit)
           .getMany();
-    
         return { ...category, ads };
-      }
+    }
 }
