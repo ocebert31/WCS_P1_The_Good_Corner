@@ -1,4 +1,3 @@
-import { PartialAdWithoutId } from "../types/ads.d"; 
 import AdRepository from "../repositories/Ad.repository";
 import AdEntity from "../entities/Ad.entity";
 
@@ -18,7 +17,7 @@ export default class AdService {
         return ad;
     }
     async createdAd(ad: Omit<AdEntity, "id" | "created_at" | "updated_at">) {
-        const newAd = await this.db.save({...ad,})
+        const newAd = await this.db.save(ad)
         return newAd;
     }
     async deletedAd(id: string) {

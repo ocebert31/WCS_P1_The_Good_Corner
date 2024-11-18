@@ -1,81 +1,40 @@
-import { Category, PartialCategoryWithoutId} from "../types/categories.d";
-import sqlite3 from "sqlite3";
+import CategoryRepository from "../repositories/Category.repository";
+import CategoryEntity from "../entities/Category.entity";
 
 export default class CategoryService {
-    db: sqlite3.Database;
+    db: CategoryRepository;
     constructor(){
-        this.db = new sqlite3.Database("the_good_corner.sqlite")
+        this.db = new CategoryRepository();
     }
     async listCategories() {
-        return new Promise<Category[]>((resolve, reject) => {
-            this.db.all<Category>("SELECT * FROM categories", (err, rows) => {
-                if (err) {
-                    reject(err.message);
-                }
-                resolve(rows);
-            }); 
-        });
+        return await this.db.find();
     }
-    findCategoryById(id: string) {
-        return new Promise<Category>((resolve, reject) => {
-          this.db.get<Category>("SELECT * FROM categories WHERE id = ?",[id], (err: any, row) => {
-              if (err) {
-                reject(err.message);
-              }
-              resolve(row);
-            });
-        });
+    async findCategoryById(id: string, limit?: string) {
+        let category: CategoryEntity | null;
+        if (limit) { 
+            category = await this.db.findCategoryByIdWithLimitAds(id, limit);
+        } else {
+            category = await this.db.findOne({ where: { id } });
+        }
+        if (!category) {
+            throw new Error("La catégorie n'existe pas");
+        }
+        return category;
     }
-    async createdCategory (category: Category): Promise<Category> {
-        return new Promise((resolve, reject) => {
-            this.db.run("INSERT INTO categories (title) VALUES (?)",[category.title],
-            function (err) {
-                if (err) {
-                    return reject(err.message);
-                }
-                resolve({...category});
-            });
-        })
+    async createdCategory (category: Omit<CategoryEntity, "id" | "created_at" | "updated_at" | "ads">) {
+        const newCategory = await this.db.save(category)
+        return newCategory
     }
     async deletedCategory(id: string) {
-        return new Promise<string>(async (resolve, reject) => {
-            this.db.run("DELETE FROM categories WHERE id = ?", [id], async function (error) {
-                if (error) {
-                    reject(error);
-                } else {
-                    if (this.changes === 0) {
-                        reject("La catégorie n'existe pas")
-                    }
-                    resolve(id);
-                }
-            });
-        });
+        const deletedCategory = await this.db.delete({ id });
+        if (deletedCategory.affected === 0) {
+            throw new Error("La catégorie n'existe pas");
+        }
+        return id;
     }
-    async updatedCategory(id: string, category: Partial<PartialCategoryWithoutId>) {
-        return new Promise<Category>(async (resolve, reject) => {
-            try {
-                const categoryFound = await this.findCategoryById(id);
-                Object.keys(category).forEach((k) => {
-                if (category[k]) {
-                    categoryFound[k] = category[k]; 
-                }
-                });
-                this.db.run("UPDATE categories SET title = ? WHERE id = ?",
-                [categoryFound.title, categoryFound.id],
-                function (err) {
-                    if (err) {
-                        reject("Il y a eu une erreur");
-                    }
-                    if(this.changes === 0) {
-                        reject("La catégorie n'a pas été modifiée")
-                    }
-                    resolve(categoryFound);
-                });
-            } catch (err) {
-                reject(err);
-            }
-        });
+    async updatedCategory(id: string, category: Partial<Omit<CategoryEntity, "id">>) {
+        const categoryFound = await this.findCategoryById(id);
+        const categoryUpdate = this.db.merge(categoryFound, category)
+        return await this.db.save(categoryUpdate);
     }
-
-    
 }

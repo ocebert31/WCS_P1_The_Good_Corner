@@ -9,7 +9,10 @@ export default class CategoryEntity{
     @Column({unique: true})
     title: string;
 
-    @OneToMany(() => AdEntity, (a) => a.category)
+    // @OneToMany(() => AdEntity, (a) => a.category)
+    // ads: AdEntity[];
+
+    @OneToMany(() => AdEntity, (ad) => ad.category, { cascade: true, onDelete: "CASCADE" })
     ads: AdEntity[];
 
     @CreateDateColumn()

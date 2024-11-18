@@ -1,6 +1,6 @@
 import { Router } from "express";
 import CategoryService from "../services/category.services";
-import { Category, PartialCategoryWithoutId } from "../types/categories";
+import CategoryEntity from "../entities/Category.entity";
 
 const router = Router();
 
@@ -11,12 +11,12 @@ router.get("/list", async (req, res) => {
     } catch (err: any) {
         res.status(500).send({ message: err.message });
     }
-  });;
+});;
 
-router.get("/find/:id", async (req, res) => {
-    const { id } = req.params;
+router.get("/find/:id/:limit?", async (req, res) => {
+    const { id, limit } = req.params;
     try {
-        const category = await new CategoryService().findCategoryById(id);
+        const category = await new CategoryService().findCategoryById(id, limit);
         res.send(category);
     } catch (err: any) {
         res.status(500).send({ message: err.message});
@@ -24,8 +24,8 @@ router.get("/find/:id", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-    const {id, title} : Category = req.body
-    const category = {id, title};
+    const {title} : Omit<CategoryEntity, "id" | "created_at" | "updated_at"> = req.body
+    const category = {title};
     try {
         const newCategory = await new CategoryService().createdCategory(category);
         res.send(newCategory);
@@ -46,7 +46,7 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
     const { id } = req.params;
-    const { title}: PartialCategoryWithoutId = req.body;
+    const { title}: Omit<CategoryEntity, "id"> = req.body;
     const category = { title };
     try {
         const categoryUpdate = await new CategoryService().updatedCategory(id, category);

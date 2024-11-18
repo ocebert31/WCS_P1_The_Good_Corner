@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AdService from "../services/ad.service";
-import { Ad, PartialAdWithoutId, AdCreate } from "../types/ads";
+import { PartialAdWithoutId } from "../types/ads";
 import AdEntity from "../entities/Ad.entity";
 
 const router = Router();

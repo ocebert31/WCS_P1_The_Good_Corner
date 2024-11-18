@@ -24,7 +24,10 @@ export default class AdEntity {
     @Column()
     author: string;
 
-    @ManyToOne(() => CategoryEntity, (c) => c.ads )
+    // @ManyToOne(() => CategoryEntity, (c) => c.ads )
+    // category: CategoryEntity;
+
+    @ManyToOne(() => CategoryEntity, (category) => category.ads, { onDelete: "CASCADE" })
     category: CategoryEntity;
 
     @CreateDateColumn()
