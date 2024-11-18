@@ -1,6 +1,5 @@
 import { Router } from "express";
 import AdService from "../services/ad.service";
-import { PartialAdWithoutId } from "../types/ads";
 import AdEntity from "../entities/Ad.entity";
 
 const router = Router();
@@ -47,7 +46,7 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
     const { id } = req.params;
-    const { title, description, picture, location, price, author }: PartialAdWithoutId = req.body;
+    const { title, description, picture, location, price, author }: Partial<Omit<AdEntity, "id">> = req.body;
     const ad = { title, description, picture, location, price, author };
     try {
         const adUpdate = await new AdService().updatedAd(id, ad);
