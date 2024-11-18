@@ -1,5 +1,6 @@
 import AdRepository from "../repositories/Ad.repository";
 import AdEntity from "../entities/Ad.entity";
+import TagEntity from "../entities/Tag.entity";
 
 export default class AdService {
     db: AdRepository;
@@ -7,10 +8,10 @@ export default class AdService {
         this.db = new AdRepository();
     }
     async listAds() {
-        return await this.db.find({relations: ["category"]})
+        return await this.db.find({relations: ["category", "tags"]})
     }
     async findAdById(id: string){
-        const ad = await this.db.findOne({ where: { id }, relations: ["category"], });
+        const ad = await this.db.findOne({ where: { id }, relations: ["category", "tags"], });
         if (!ad) {
             throw new Error("L'annonce n'existe pas");
         }
@@ -33,11 +34,3 @@ export default class AdService {
         return await this.db.save(adUpdate);
     }
 }
-
-
-
-
-
-
-
-

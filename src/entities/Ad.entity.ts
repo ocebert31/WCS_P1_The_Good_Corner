@@ -1,5 +1,6 @@
-import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne} from "typeorm";
+import {Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, ManyToMany, JoinTable} from "typeorm";
 import CategoryEntity from "./Category.entity";
+import TagEntity from "./Tag.entity";
 
 @Entity({ name: "ads"})
 export default class AdEntity {
@@ -26,6 +27,11 @@ export default class AdEntity {
 
     @ManyToOne(() => CategoryEntity, (category) => category.ads, { onDelete: "CASCADE" })
     category: CategoryEntity;
+
+    //
+    // @ManyToMany(() => TagEntity, (tag) => tag.ads, { cascade: true })
+    // @JoinTable() 
+    // tags: TagEntity[];
 
     @CreateDateColumn()
     created_at: Date;

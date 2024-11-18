@@ -1,4 +1,5 @@
-import {Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, OneToMany} from "typeorm";
+import {Column, Entity, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn} from "typeorm";
+import AdEntity from "./Ad.entity";
 
 @Entity()
 export default class TagEntity{
@@ -7,6 +8,10 @@ export default class TagEntity{
 
     @Column({unique: true})
     label: string;
+
+    //
+    // @ManyToMany(() => AdEntity, (ad) => ad.tags)
+    // ads: AdEntity[];
 
     @CreateDateColumn()
     created_at: Date;
