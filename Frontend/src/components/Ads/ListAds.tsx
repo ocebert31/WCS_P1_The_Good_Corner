@@ -1,4 +1,6 @@
 import CardAd from "./CardAd";
+import instance from "../../lib/instance";
+import { useEffect, useState } from "react";
 
 export type Ad = {
     id: string;
@@ -9,28 +11,38 @@ export type Ad = {
 }
 
 function ListAds() {
-    const ListAds: Ad[] = [
-        {
-            id: "0d20a325-1919-483d-ab90-c9249dbb4bd3",
-            title: "Mon super titre 5",
-            description: "Ma super description 5",
-            price: 20,
-            created_at: "2024-11-18T09:59:04.000Z",
-        },
-        {
-            id: "54455d21-b334-4135-b63c-f85232cab446",
-            title: "Mon super titre 5",
-            description: "Ma super description 5",
-            price: 20,
-            created_at: "2024-11-18T10:08:55.000Z",
-        },
-    ];
+    const [ads, setAds] = useState<Ad[]>([]);
+    const [isLoading, setIsLoading] = useState(true)
+
+    const getAds = async () => {
+        try {
+            const { data } = await instance.get<Ad[]>("/ads/list");
+            setAds(data)
+            setIsLoading(false)
+        } catch(err: unknown) {
+            console.log(err)
+        }
+       
+    }
+
+    useEffect(() => {
+        getAds()   
+    }, [])
+
+    if(isLoading) {
+        return <div>Chargement en cours</div>
+    }
 
     return (
         <div>
-            {ListAds.map((ad) => (
+            {ads.length > 0 ? (
+                ads.map((ad) => (
                 <CardAd key={ad.id} ad={ad} />
-            ))}
+            ))
+            ) : (
+            <div>Aucune annonce</div>
+            )
+        }
         </div>
     );
 }
