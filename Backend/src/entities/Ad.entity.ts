@@ -28,10 +28,14 @@ export default class AdEntity {
     @ManyToOne(() => CategoryEntity, (category) => category.ads, { onDelete: "CASCADE" })
     category: CategoryEntity;
 
-    //
-    // @ManyToMany(() => TagEntity, (tag) => tag.ads, { cascade: true })
-    // @JoinTable() 
-    // tags: TagEntity[];
+    
+    @ManyToMany(() => TagEntity)
+    @JoinTable({
+        name: "ads_tags",
+        joinColumn: { name: "ad_id"},
+        inverseJoinColumn: { name: "tag_id"}
+    }) 
+    tags: TagEntity[];
 
     @CreateDateColumn()
     created_at: Date;

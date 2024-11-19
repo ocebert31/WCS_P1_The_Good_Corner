@@ -24,8 +24,8 @@ router.get("/find/:id", async (req, res) => {
 });
 
 router.post("/create", async (req, res) => {
-    const {title, description, price, picture, location, author, category } : Omit<AdEntity, "id" | "created_at" | "updated_at"> = req.body
-    const ad = {title, description, price, picture, location, author, category};
+    const {title, description, price, picture, location, author, category, tagsIds } : Omit<AdEntity, "id" | "created_at" | "updated_at" | "tags"> & {tagsIds: string[];} = req.body;
+    const ad = {title, description, price, picture, location, author, category, tagsIds: tagsIds ?? []};
     try {
         const newAd = await new AdService().createdAd(ad)
         res.send(newAd);
@@ -46,8 +46,8 @@ router.delete("/delete/:id", async (req, res) => {
 
 router.patch("/update/:id", async (req, res) => {
     const { id } = req.params;
-    const { title, description, picture, location, price, author }: Partial<Omit<AdEntity, "id">> = req.body;
-    const ad = { title, description, picture, location, price, author };
+    const { title, description, picture, location, price, author, tagsIds }: Partial<Omit<AdEntity, "id" | "tags">  & {tagsIds: string[];}> = req.body;
+    const ad = { title, description, picture, location, price, author, tagsIds };
     try {
         const adUpdate = await new AdService().updatedAd(id, ad);
         res.send(adUpdate);

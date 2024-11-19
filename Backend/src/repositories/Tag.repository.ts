@@ -10,6 +10,4 @@ export default class TagRepository extends Repository<TagEntity> {
   /**======================
    *?    On pourra rajouter de nouvelles fonctions à notre catalogue de requêtes
    *========================**/
-
-  
 }

@@ -1,5 +1,6 @@
 import TagRepository from "../repositories/Tag.repository";
 import TagEntity from "../entities/Tag.entity";
+import { In } from "typeorm";
 
 export default class TagService {
     db: TagRepository;
@@ -8,6 +9,13 @@ export default class TagService {
     }
     async listTags() {
         return await this.db.find()
+    }
+    async findMultipleTagsByIds(ids: string[]) {
+        const tags = await this.db.find({ where: { id: In(ids) } });
+        if (tags.length === 0) {
+          throw new Error("No Tag found");
+        }
+        return tags;
     }
     async findTagById(id: string){
         const tag = await this.db.findOne({ where: { id } });

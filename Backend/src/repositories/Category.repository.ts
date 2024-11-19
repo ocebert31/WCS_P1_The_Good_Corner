@@ -11,16 +11,16 @@ export default class CategoryRepository extends Repository<CategoryEntity> {
     async findCategoryByIdWithLimitAds(id: string, limit: string) {
         const adsRepository = new AdRepository();
         const category = await this.findOne({
-          where: { id },
+            where: { id },
         });
         if (!category) {
-          throw new Error("No Category found");
+            throw new Error("No Category found");
         }
-        const ads = await adsRepository.createQueryBuilder("ad")
-          .where("ad.categoryId = :id", { id })
-          .orderBy("ad.created_at", "DESC")
-          .take(+limit)
-          .getMany();
+        const ads = await adsRepository.find({
+            where: { category: { id } },
+            order: { created_at: "DESC" },
+            take: +limit,
+        });
         return { ...category, ads };
     }
 }
