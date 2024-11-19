@@ -1,4 +1,5 @@
 import {Ad} from "./ListAds";
+import { Link } from "react-router-dom";
 
 function CardAd(props: {ad: Ad}) {
     return (
@@ -7,6 +8,7 @@ function CardAd(props: {ad: Ad}) {
             <p>{props.ad.description}</p>
             <p>Prix : {props.ad.price} €</p>
             <p>Créé le : {new Date(props.ad.created_at).toLocaleDateString()}</p>
+            <Link to={`/ads/${props.ad.id}`}>Voir le produit</Link>
         </div>
     );
 }
