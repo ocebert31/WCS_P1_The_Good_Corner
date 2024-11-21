@@ -1,25 +1,18 @@
 import { useEffect, useState } from "react";
 import instance from "../lib/instance";
 import { useParams } from 'react-router-dom';
-
-export type Ad = {
-    id: string;
-    title: string;
-    description: string;
-    price: number;
-    location: string;
-    author: string;
-    created_at: string;
-}
+import { Ad } from "../components/Ads/ListAds";
 
 function AdPage() {
     const [ad, setAd] = useState<Ad | null>(null);
+    const [isLoading, setIsLoading] = useState(true)
     const { id } = useParams()
 
     const getAd = async () => {
         try {
             const { data } = await instance.get<Ad>(`/ads/find/${id}`);
             setAd(data)
+            setIsLoading(false);
         } catch(err: unknown) {
             console.log(err)
         }
@@ -28,6 +21,10 @@ function AdPage() {
     useEffect(() => {
         getAd()   
     }, [id])
+
+    if(isLoading) {
+        return <div>Chargement en cours</div>
+    }
 
     return(
         <div>

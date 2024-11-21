@@ -6,7 +6,9 @@ export type Ad = {
     id: string;
     title: string;
     description: string;
+    location: string;
     price: number;
+    author: number;
     created_at: string;
 }
 
