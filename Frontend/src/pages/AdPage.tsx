@@ -34,7 +34,6 @@ function AdPage() {
                     <p>Description : {ad.description}</p>
                     <p>Prix : {ad.price} €</p>
                     <p>Localisation : {ad.location}</p>
-                    <p>Auteur : {ad.author}</p>
                     <p>Date de création : {new Date(ad.created_at).toLocaleDateString()}</p>
                 </div>
             ) : (

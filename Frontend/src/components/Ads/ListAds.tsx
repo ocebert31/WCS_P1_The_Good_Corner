@@ -1,16 +1,7 @@
 import CardAd from "./CardAd";
 import instance from "../../lib/instance";
 import { useEffect, useState } from "react";
-
-export type Ad = {
-    id: string;
-    title: string;
-    description: string;
-    location: string;
-    price: number;
-    author: number;
-    created_at: string;
-}
+import { Ad } from "../../types/ads";
 
 function ListAds() {
     const [ads, setAds] = useState<Ad[]>([]);

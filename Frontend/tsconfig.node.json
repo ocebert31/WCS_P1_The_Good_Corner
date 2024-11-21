@@ -12,6 +12,12 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "baseUrl": "src",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    },
 
     /* Linting */
     "strict": true,

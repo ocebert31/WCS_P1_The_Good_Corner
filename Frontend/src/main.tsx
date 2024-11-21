@@ -6,6 +6,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import HomePage from './pages/HomePage.tsx';
 import AdPage from './pages/AdPage.tsx';
 import Exercice1 from './components/Exercice/Exercice1/ToDoList.tsx';
+import NewAdPage from './pages/NewAdPage.tsx';
 
 const router = createBrowserRouter([
     {
@@ -16,12 +17,16 @@ const router = createBrowserRouter([
                 element: <HomePage/>
             },
             {
-                path: "/ads/:id",
+                path: "/ads/view/:id",
                 element: <AdPage/>
             },
             {
                 path: "/exercice1",
                 element: <Exercice1/>
+            },
+            {
+                path: "/ads/create",
+                element: <NewAdPage/>
             },
         ]
     },
